@@ -1,25 +1,49 @@
-import sys
-# Remove current dir from sys.path, otherwise setuptools will peek up our
-# module instead of system.
-sys.path.pop(0)
-from setuptools import setup
+from setuptools import setup, find_packages
 
-setup(
-    name='micropython-tm1637',
-    py_modules=['tm1637'],
-    version='1.3.0',
-    description='MicroPython library for TM1637 LED driver.',
-    long_description='This library lets you operate quad 7-segment LED display modules based on the TM1637 LED driver.',
-    keywords='tm1637 seven segment led micropython',
-    url='https://github.com/mcauser/micropython-tm1637',
-    author='Mike Causer',
-    author_email='mcauser@gmail.com',
-    maintainer='Mike Causer',
-    maintainer_email='mcauser@gmail.com',
-    license='MIT',
-    classifiers = [
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+def read(file_name):
+    with open(os.path.join(here, file_name)) as f:
+        text = f.read()
+
+    return text
+
+README = read('README.rst')
+NEWS = read('NEWS.txt')
+
+
+version = '1.0.0'
+
+setup(name='pytm1637',
+    version=version,
+    description='Python Library for TM1637 LED driver.',
+    long_description=README,
+    classifiers=[
+        # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python :: Implementation :: MicroPython',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Operating System :: POSIX :: Linux',
     ],
+    keywords='tm1637 seven segment led',
+    author='Nenad Radulovic',
+    author_email='nenad.b.radulovic@gmail.com',
+    maintainer='Nenad Radulovic',
+    maintainer_email='nenad.b.radulovic@gmail.com',
+    url='https://gitlab.com/nradulovic',
+    license='LGPL',
+    packages=find_packages('src'),
+    package_dir={'': 'src'}, include_package_data=True,
+    zip_safe=False,
+    install_requires=[
+        # Currently no dependencies
+    ],
+    entry_points={
+        'console_scripts':
+            ['pyeds=main:main']
+    }
 )
