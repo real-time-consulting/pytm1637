@@ -44,6 +44,6 @@ setup(name='pytm1637',
     ],
     entry_points={
         'console_scripts':
-            ['pyeds=main:main']
+            ['pytm1637demo=pytm1637demo:main']
     }
 )

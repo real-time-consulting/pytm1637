@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  
+# command to run tests
+# pylint installs pytest-runner, and 2.12 creates a version mismatch
+# https://github.com/pytest-dev/pytest-runner/issues/40
+script:
+  - pip3 install 'pytest-runner==2.12'
+  - python3 setup.py test
