@@ -25,7 +25,6 @@ SOFTWARE.
 """
 
 from micropython import const
-from machine import Pin
 from time import sleep_us, sleep_ms
 
 TM1637_CMD1 = const(64)  # 0x40 data command
