@@ -1,5 +1,12 @@
-include README.rst
-include NEWS.txt
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include HISTORY.rst
 include LICENSE
-include CODE_OF_CONDUCT.md
-include CONTRIBUTING.md
+include README.rst
+
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+

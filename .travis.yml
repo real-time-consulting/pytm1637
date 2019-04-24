@@ -1,13 +1,44 @@
+# Config file for automatic testing at travis-ci.org
+
 language: python
 python:
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  
-# command to run tests
-# pylint installs pytest-runner, and 2.12 creates a version mismatch
-# https://github.com/pytest-dev/pytest-runner/issues/40
-script:
-  - pip3 install 'pytest-runner==2.12'
-  - python3 setup.py test
+  - 3.6
+  - 3.5
+  - 3.4
+  - 2.7
+
+# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: pip install -U tox-travis
+
+# Command to run tests, e.g. python setup.py test
+script: tox
+
+# Assuming you have installed the travis-ci CLI tool, after you
+# create the Github repo and add it to Travis, run the
+# following command to finish PyPI deployment setup:
+# $ travis encrypt --add deploy.password
+#
+# Travis CI can automatically release your Python package to PyPI after a 
+# successful build. For a minimal configuration, add the following to your 
+# .travis.yml:
+# 
+# deploy:
+#   provider: pypi
+#   user: "Your username"
+#   password: "Your password"
+# 
+# However, this would expose your PyPI password to the world. We recommend you 
+# encrypt your password and add it to your .travis.yml by running:
+#
+# travis encrypt your-password-here --add deploy.password
+#
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: nradulovic
+  password:
+    secure:  eqM1EK4je5/1qhiIPFm8+HDMR2d2k0DhsNYj4NU4DK9DtUPHYkgRca8K8wWa4xFgKrqg7LBFH8C/0aOPbM6/O0rP5P/EKNDEPl59Arnj0vM/i2yoClgFCee5Twwkh2a6cXjXgUD5sj/Aaa+tCTGDhdFl6D0Rif7CrhKwwvT23vwfLhhZjhM5XVYIH+ufOZPM9CwXQMKPWW6WG92Oa8JZXCDDJmfqJaf2jhNshcMBA7kWKnRkjW+euWOgix8ieRN6YUQiSPCqiNWXSQcxOhIdRM81e0Bxgxy9A+SwxEP26LD8N2NRVpKpJ/EFdRml6RpgbJwuEwlZUsZTKCRKUDqDZbVqeIQBTTysNXtxqcYh67qwPEhmR66t42pbymH8KqsfGiODP7HEDThxdOY2FoL+QsqcB44d4IArMJ5Wokod887yIb4kGZYM93BKg3azIMjDPk8cAfdyzA1HgonAYINybqNp3NcX+KMXwfNCElg5NTn632LGcOmTDCj1hHddMKCHdmCLssUEod0dZaKdk1xK4lqpNuQbCBENn9dJG0vzNdAwOZVmsR+Q2d01WTMn5mYhhhVmbcqH0Y/Jipcj86vXo0D3N4JZMkLSgvCIpYZ4CLFB/8pUYxO4VuyKEtfeT0lAIqsv//r3xUImYoi8TZcxLumOf882p7AGQHYs9qvoZ2I=
+  on:
+    tags: true
+    repo: nradulovic/py_tm1637
+    python: 3.6

@@ -1,0 +1,4 @@
+ntplib==0.3.3
+smbus2==0.2.3
+spidev==3.4
+weather-api==1.0.7
