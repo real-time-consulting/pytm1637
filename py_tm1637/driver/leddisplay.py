@@ -1,7 +1,9 @@
 
 class LedDisplay(object):
-    
-    _SEGMENTS = bytearray(b'\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F\x77\x7C\x39\x5E\x79\x71\x3D\x76\x06\x1E\x76\x38\x55\x54\x3F\x73\x67\x50\x6D\x78\x3E\x1C\x2A\x76\x6E\x5B\x00\x40\x63')
+    _SEGMENTS = bytearray(b'\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F\x77\x7C'
+                          '\x39\x5E\x79\x71\x3D\x76\x06\x1E\x76\x38\x55\x54'
+                          '\x3F\x73\x67\x50\x6D\x78\x3E\x1C\x2A\x76\x6E\x5B'
+                          '\x00\x40\x63')
 
     CONVERSION_TABLE = {
         '0': 0x3f,
@@ -21,16 +23,16 @@ class LedDisplay(object):
         'e': 0x79,
         'f': 0x71,
     }
-    DISPLAYS = 4 # Specifies the number of displays
-    COLONS = 1   # Specifies the number of colon LED on the display
-    POINTS = 0   # Specifies the number of point LED on the display
+    DISPLAYS = 4  # Specifies the number of displays
+    COLONS = 1    # Specifies the number of colon LED on the display
+    POINTS = 0    # Specifies the number of point LED on the display
 
     def __init__(self):
         '''Initialize the LedDisplay class
         '''
         self.FORMAT_STRING = '{{:>{0:d}.{0:d}s}}'.format(self.DISPLAYS)
 
-    def write(self, segments, colon = 0, point = 0):
+    def write(self, segments, colon=0, point=0):
         '''Write segments to LED display controller chip.
 
         Args:
@@ -39,13 +41,13 @@ class LedDisplay(object):
               if the array is bigger then the number of available displays.
             * colon (:obj:`int`, *optional*): This argument is used to specify
               which colons need to be light up. The integer is interpreted as
-              a bit mask. If the argument is `0` then no colon LED will light 
-              up. LSB bit of the integer is associated with the colon on the 
+              a bit mask. If the argument is `0` then no colon LED will light
+              up. LSB bit of the integer is associated with the colon on the
               right side. Default is all off.
             * point (:obj:`int`, *optional*): This argument is used to specify
               which point need to be light up. The integer is interpreted as
-              a bit mask. If the argument is `0` then no point LED will light 
-              up. LSB bit of the integer is associated with the point on the 
+              a bit mask. If the argument is `0` then no point LED will light
+              up. LSB bit of the integer is associated with the point on the
               right side. Default is all off.
         '''
         raise NotImplementedError('Abstract method not implemented')
@@ -53,23 +55,23 @@ class LedDisplay(object):
     def encode_string(self, string):
         '''Convert an up to 4 character length string containing 0-9, a-z,
         space, dash, star to an array of segments.
-        
+
         Args:
             * string (:obj:`str`): A string which needs to be converted to
               segments
         '''
-        return bytearray(map(self.encode_char, 
+        return bytearray(map(self.encode_char,
                              self.FORMAT_STRING.format(string)))
 
     def encode_char(self, char):
         '''Encode a character to a segment.
-        
+
         Args:
             * char (:obj:`str`): A single char that needs to be converted to
               segment.
 
         Raises:
-            * ValueError: When the char argument cannot be converted to a 
+            * ValueError: When the char argument cannot be converted to a
               segment.
 
         Returns:
@@ -78,12 +80,13 @@ class LedDisplay(object):
         try:
             return self.CONVERSION_TABLE[char]
         except KeyError:
-            raise ValueError('Character out of range: {:d} \'{:s}\''.format(ord(char), char))
+            raise ValueError('Character out of range: {:d} \'{:s}\''.format(
+                    ord(char), char))
 
     def text(self, text):
         self.write(self.encode_string(text))
 
-    def number(self, num, leading_zero = False):
+    def number(self, num, leading_zero=False):
         if not leading_zero:
             string = '{: >4d}'.format(num)
         else:
@@ -112,7 +115,7 @@ class LedDisplay(object):
                 string = 'hi'
         self.text(string)
 
-    def time(self, hour, minute, seconds, flash = True):
+    def time(self, hour, minute, seconds, flash=True):
         '''Display time information on the display.
 
         If the current LED Display has 4 display then HH:MM will be shown. If
@@ -123,18 +126,17 @@ class LedDisplay(object):
             * hour (:obj:`int`): Hour information
             * minute (:obj:`int`): Minute information
             * seconds (:obj:`int`): Seconds information
-            * flash (:obj:`boolean`, *optional*): If the argument is `True` 
-              then the colon LEDs will be flashed each second. If the argument 
+            * flash (:obj:`boolean`, *optional*): If the argument is `True`
+              then the colon LEDs will be flashed each second. If the argument
               is `False` then the colon LEDs will be constantly on. The default
               value is `True`.
         '''
         if self.DISPLAYS >= 6:
             string = '{:02d}{:02d}{:02d}'.format(hour, minute, seconds)
-        else: 
+        else:
             string = '{:02d}{:02d}'.format(hour, minute)
         if flash:
             colon = 255 if seconds & 0x1 else 0
         else:
             colon = 255
         self.write(self.encode_string(string), colon=colon)
-
