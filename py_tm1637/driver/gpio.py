@@ -14,10 +14,10 @@ def import_gpio_lib(libraries):
             continue
     return Library(None, 'None')
 
+
 module = import_gpio_lib(GPIO_LIBS)
 
 if module.name == 'gpiozero':
-    
 
     class Pin:
         def __init__(self, pin_id, mode='in'):
@@ -30,7 +30,6 @@ if module.name == 'gpiozero':
 
 if module.name == 'rpi':
 
-
     class Pin:
         pass
 
@@ -41,5 +40,4 @@ else:
 
 
 Converter = {
-    11:17}
-    
+    11: 17}
