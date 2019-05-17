@@ -1,0 +1,2 @@
+# Update only insecure packages
+update: insecure
