@@ -24,15 +24,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from micropython import const
 from time import sleep_us, sleep_ms
 
-TM1637_CMD1 = const(64)     # 0x40 data command
-TM1637_CMD2 = const(192)    # 0xC0 address command
-TM1637_CMD3 = const(128)    # 0x80 display control command
-TM1637_DSP_ON = const(8)    # 0x08 display on
-TM1637_DELAY = const(10)    # 10us delay between clk/dio pulses
-TM1637_MSB = const(128)     # msb is the decimal point or the colon depending
+TM1637_CMD1 = 64     # 0x40 data command
+TM1637_CMD2 = 192    # 0xC0 address command
+TM1637_CMD3 = 128    # 0x80 display control command
+TM1637_DSP_ON = 8    # 0x08 display on
+TM1637_DELAY = .001    # 10us delay between clk/dio pulses
+TM1637_MSB = 128     # msb is the decimal point or the colon depending
 # on your display
 
 # 0-9, a-z, blank, dash, star
