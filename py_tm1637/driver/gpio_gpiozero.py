@@ -1,5 +1,6 @@
 
-#import gpiozero
+import gpiozero
+
 
 class Pin:
     def __init__(self, pin_id, mode='in'):
@@ -8,7 +9,7 @@ class Pin:
     @property
     def state(self, value):
         self.pin.value(value)
-    
+ 
 
 converter = {
     11: 17}

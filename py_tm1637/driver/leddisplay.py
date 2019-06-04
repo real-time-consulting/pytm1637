@@ -1,7 +1,7 @@
 
 
 class LedDisplay(object):
-    _SEGMENTS = bytearray(b'\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F\x77\x7C'
+    _SEGMENTS = bytearray('\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F\x77\x7C'
                           '\x39\x5E\x79\x71\x3D\x76\x06\x1E\x76\x38\x55\x54'
                           '\x3F\x73\x67\x50\x6D\x78\x3E\x1C\x2A\x76\x6E\x5B'
                           '\x00\x40\x63')
@@ -24,14 +24,26 @@ class LedDisplay(object):
         'e': 0x79,
         'f': 0x71,
     }
-    DISPLAYS = 4  # Specifies the number of displays
-    COLONS = 1    # Specifies the number of colon LED on the display
-    POINTS = 0    # Specifies the number of point LED on the display
 
     def __init__(self):
         '''Initialize the LedDisplay class
         '''
         self.FORMAT_STRING = '{{:>{0:d}.{0:d}s}}'.format(self.DISPLAYS)
+        self.DISPLAYS = 4  # Specifies the number of displays
+        self.COLONS = 1    # Specifies the number of colon LED on the display
+        self.POINTS = 0    # Specifies the number of point LED on the display
+
+    def configure(self, configuration):
+        '''Configure the display driver
+        '''
+        if 'displays' in configuration:
+            self.DISPLAYS = configuration['displays']
+
+        if 'colons' in configuration:
+            self.COLONS = configuration['colons']
+
+        if 'points' in configuration:
+            self.POINTS = configuration['points']
 
     def write(self, segments, colon=0, point=0):
         '''Write segments to LED display controller chip.
@@ -85,9 +97,13 @@ class LedDisplay(object):
                     ord(char), char))
 
     def text(self, text):
+        '''Write text to the display.
+        '''
         self.write(self.encode_string(text))
 
     def number(self, num, leading_zero=False):
+        '''Write a number to display.
+        '''
         if not leading_zero:
             string = '{: >4d}'.format(num)
         else:
