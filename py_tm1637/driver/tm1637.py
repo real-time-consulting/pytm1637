@@ -40,13 +40,10 @@ class TM1637(leddisplay.LedDisplay):
 
     def __init__(self):
         super().__init__()
-        self.dio = gpio.Pin(self.dio_gpio)
         self.clk = gpio.Pin(self.clk_gpio)
+        self.dio = gpio.Pin(self.dio_gpio)
         self._brightness = 7  # Maximum brightness
-
-    @staticmethod
-    def array_build(byte):
-        return tuple(byte >> i & 1 for i in reversed(range(8)))
+        self._stop()
 
     def _start(self):
         self.dio.state = 0
@@ -70,7 +67,8 @@ class TM1637(leddisplay.LedDisplay):
         time.sleep(self.TM1637_DELAY)
 
     def _write_byte(self, byte_data):
-        map(self._write_bit, tuple(byte >> i & 1 for i in reversed(range(8))))
+        map(self._write_bit, tuple(
+                byte_data >> i & 1 for i in reversed(range(8))))
         self.clk.state = 0
         time.sleep(TM1637_DELAY)
         self.clk.state = 1
@@ -106,6 +104,7 @@ class TM1637(leddisplay.LedDisplay):
         self._write_dsp_ctrl()
 
     def write(self, segments, colon=0, point=0):
+        
         self._write_data_cmd()
         self._start()
         self._write_byte(self.TM1637_CMD2)
